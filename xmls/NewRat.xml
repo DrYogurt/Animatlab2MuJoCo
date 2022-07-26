@@ -1,0 +1,70 @@
+<mujoco>
+  <compiler coordinate="local" angle="degree" eulerseq="xyz"/>
+  <default>
+    <geom rgba=".8 .4 .6 1" />
+  </default>
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256" height="256" />
+  </asset>
+  <worldbody>
+    <geom name="floor" pos="0 0 -5" size="10 10 0.125" type="plane" condim="3" rgba="1 1 1 1" />
+    <light pos="0 5 5" dir="0 -1 -1" diffuse="1 1 1" />
+    <body name="Pelvis" pos="0.0 0.0 0.0" euler="90.01166961505233 -180.02333923010465 -60.0000701530499">
+      <geom type="box" size="0.8500000000000001 1.55 1.0" />
+      <site name="RH_HipZ Extensor Pelvis" pos="2.1056 0.3217 -0.9983000000000001" />
+      <site name="LH_HipZ Extensor Pelvis" pos="2.104 0.3217 1.0017" />
+      <site name="RH_HipZ Flexor Pelvis" pos="-1.1092 0.3434 -1.0009000000000001" />
+      <body name="RH_Femur" pos="0.7105 1.7895 -1.5900999999999998" euler="-70.70299191914359 0.0 0.0">
+        <geom type="box" size="0.345 0.345 1.79" />
+        <site name="RH_Knee Extensor Femur Mid" pos="0.0452 0.1315 -2.0257" />
+        <site name="RH_Knee Flexor Femur" pos="-0.1583 -0.40220000000000006 0.5881" />
+        <site name="RH_HipZ Flexor Femur" pos="-0.6624 0.0701 0.2423" />
+        <site name="RH_Knee Extensor Femur" pos="-0.3014 -0.1609 0.6724" />
+        <site name="RH_Knee Extensor Femur Mid2" pos="-0.6078 0.256 -1.7531" />
+        <body name="RH_Tibia" pos="2.1978 0.1782 -2.2329000000000003" euler="0.0 -11.499835906070754 -4.599991658207815">
+          <geom type="box" size="0.27499999999999997 2.244 0.27499999999999997" />
+          <site name="RH_AnkleZ Extensor Tibia" pos="-1.2661 -0.1724 0.1634" />
+          <site name="RH_AnkleZ Extensor Tibia Mid" pos="2.083 -0.1674 0.42069999999999996" />
+          <body name="RH_Foot" pos="2.2378 0.0897 -0.2727" euler="-20.000237754631645 0.0 0.0">
+            <geom type="box" size="0.31 0.31 0.6799999999999999" />
+            <site name="RH_AnkleZ Extensor Foot" pos="0.2167 0.0173 0.7587" />
+            <site name="RH_AnkleZ Flexor Foot" pos="0.1939 -0.09940000000000002 -0.2013" />
+            <joint name="RH_AnkleZ" pos="0.01 0.02 0.27999999999999997" axis="0.0 0.0 90.01166961505233" />
+          </body>
+          <site name="RH_Knee Flexor Tibia" pos="-1.6477 -0.4386 0.1729" />
+          <site name="RH_AnkleZ Flexor Tibia" pos="-1.1594 -0.0077413 -0.29650000000000004" />
+          <site name="RH_Knee Extensor Tibia" pos="-1.5982 0.0492 0.021900000000000003" />
+          <joint name="RH_Knee" pos="-2.244 0.0 0.0" axis="90.01166961505233 90.01166961505233 0.0" />
+        </body>
+        <site name="RH_HipZ Extensor Femur" pos="0.0552 0.1961 0.7969" />
+        <joint name="RH_HipZ" pos="0.0 0.0 1.79" axis="0.0 0.0 90.01166961505233" />
+      </body>
+      <body name="LH_Femur" pos="0.7095 1.7901 1.5899" euler="-108.97657263388257 0.0 0.0">
+        <geom type="box" size="0.345 0.345 1.79" />
+        <site name="LH_Knee Extensor Femur" pos="-0.3025 0.1581 0.6735" />
+        <site name="LH_HipZ Extensor Femur" pos="0.0548 -0.199 0.796" />
+        <site name="LH_HipZ Flexor Femur" pos="-0.6631 -0.07110000000000001 0.2421" />
+        <site name="LH_Knee Flexor Femur" pos="-0.15969999999999998 0.4001 0.5904" />
+        <body name="LH_Tibia" pos="2.1975000000000002 -0.1652 -2.2342" euler="0.0 -11.499835906070754 4.599991658207815">
+          <geom type="box" size="0.27499999999999997 2.244 0.27499999999999997" />
+          <site name="LH_AnkleZ Extensor Tibia" pos="-1.2677 0.1729 0.16570000000000001" />
+          <site name="LH_AnkleZ Extensor Tibia Mid" pos="2.0814 0.1767 0.42300000000000004" />
+          <site name="LH_Knee Extensor Tibia" pos="-1.5990999999999997 -0.049 0.0228" />
+          <site name="LH_AnkleZ Flexor Tibia" pos="-1.1605 0.0111 -0.29510000000000003" />
+          <site name="LH_Knee Flexor Tibia" pos="-1.6502 0.4379 0.1766" />
+          <body name="LH_Foot" pos="2.2377000000000002 -0.0848 -0.2746" euler="20.000237754631645 0.0 0.0">
+            <geom type="box" size="0.31 0.31 0.6799999999999999" />
+            <site name="LH_AnkleZ Extensor Foot" pos="0.21480000000000002 -0.0136 0.7645" />
+            <site name="LH_AnkleZ Flexor Foot" pos="0.1936 0.1083 -0.19469999999999998" />
+            <joint name="LH_AnkleZ" pos="0.01 -0.01 0.29" axis="0.0 0.0 90.01166961505233" />
+          </body>
+          <joint name="LH_Knee" pos="-2.244 0.0 0.0" axis="90.01166961505233 90.01166961505233 0.0" />
+        </body>
+        <site name="LH_Knee Extensor Femur mid" pos="0.0443 -0.1186 -2.0263" />
+        <site name="LH_Knee Extensor Femur Mid2" pos="-0.6086 -0.2457 -1.7544" />
+        <joint name="LH_HipZ" pos="-7.779999999999999e-07 6.54e-05 1.79" axis="0.0 0.0 90.01166961505233" />
+      </body>
+      <site name="LH_HipZ Flexor Pelvis" pos="-1.1108 0.3434 0.9991" />
+    </body>
+  </worldbody>
+</mujoco>
