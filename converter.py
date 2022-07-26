@@ -130,6 +130,7 @@ def main():
     global_rot[0] = str(float(global_rot[0]) + 90)
     dic["Rotation"] = " ".join(global_rot)
     
+    
     root = et.Element("mujoco")
     root.append(et.Element("compiler",attrib={"coordinate":"local","angle":"degree","eulerseq":"xyz"}))
 
