@@ -30,6 +30,7 @@ def process_joint(joint):
     keys = ["Name","Position","Rotation","Type","Size",
             "MaxForce","MaxVelocity","EnableMotor","MotorType","ServoGain"]
     relaxations = []
+    new_jnt["limited"] = False
     for key,value in joint.items():
         if key in keys:
             new_jnt[key] = process_item(key,value,is_jnt=True)
@@ -38,7 +39,10 @@ def process_joint(joint):
             new_jnt[key]["LimitPos"] = float(value["LimitPos"])
             new_jnt[key]["Damping"] = float(value["Damping"])
             new_jnt[key]["Restitution"] = float(value["Restitution"])
-            new_jnt[key]["Stiffness"] = float(value["Stiffness"]) 
+            new_jnt[key]["Stiffness"] = float(value["Stiffness"])
+            new_jnt["limited"] = True
+        if key.__contains__("Relaxation") and value["Name"].__contains__("Rotation"):
+            relaxations.append(value)
         if key == "Friction":
             if value["Enabled"] == True:
                 new_jnt["Friction"] = {}
@@ -46,8 +50,16 @@ def process_joint(joint):
                 new_jnt["Friction"]["Coefficient"] = float(value["Coefficient"])
                 new_jnt["Friction"]["MaxForce"] = float(value["MaxForce"])
                 new_jnt["Friction"]["Loss"] = float(value["Loss"])
-                
-            
+    
+    rot_axis = [0,0,0]
+    for r in relaxations:
+        if r["Name"].__contains__("X"):
+            rot_axis[0] = True
+        if r["Name"].__contains__("Y"):
+            rot_axis[1] = True
+        if r["Name"].__contains__("Z"):
+            rot_axis[2] = True
+    new_jnt["axis"] = "{:n} {:n} {:n}".format(not rot_axis[0],not rot_axis[1],not rot_axis[2])
     return new_jnt
 
 def process_item(key,param,is_jnt=False):
@@ -86,6 +98,18 @@ def xmlify_body(dic,attach_ids={},root=0):
         "type": "box",
         "size": dic["size"]
     }))
+    if "Joint" in dic.keys():
+            joints = []
+            if isinstance(dic["Joint"],list):
+                joints = dic["Joint"]
+            else:
+                joints.append(dic["Joint"])
+            for value in joints:
+                body.append(et.Element("joint",attrib={
+                    "name":value["Name"],
+                    "pos":value["Position"],
+                    "axis":value["Rotation"] # TODO: Potential issue n+2
+                }))
     if "ChildBodies" in dic.keys():
         for value in dic["ChildBodies"]:
             if value["Type"] == "Attachment":
@@ -100,18 +124,6 @@ def xmlify_body(dic,attach_ids={},root=0):
                 child, child_muscles, _ = xmlify_body(value,attach_ids=attach_ids,root=1)
                 body.append(child)
                 muscles.append(child_muscles)
-    if "Joint" in dic.keys():
-            joints = []
-            if isinstance(dic["Joint"],list):
-                joints = dic["Joint"]
-            else:
-                joints.append(dic["Joint"])
-            for value in joints:
-                body.append(et.Element("joint",attrib={
-                    "name":value["Name"],
-                    "pos":value["Position"],
-                    "axis":value["Rotation"] # TODO: Potential issue n+2
-                }))
 
     if root == 0:
         pass
@@ -130,7 +142,7 @@ def main():
     global_rot[0] = str(float(global_rot[0]) + 90)
     dic["Rotation"] = " ".join(global_rot)
     
-    
+
     root = et.Element("mujoco")
     root.append(et.Element("compiler",attrib={"coordinate":"local","angle":"degree","eulerseq":"xyz"}))
 
@@ -146,13 +158,13 @@ def main():
                                             }))
     world_body = et.SubElement(root,"worldbody")
     world_body.append(et.Element("geom",attrib={"name":"floor",
-                                                "pos":"0 0 -5",
+                                                "pos":"0 0 -10",
                                                 "size":"10 10 0.125",
                                                 "type":"plane",
                                                 "condim":"3",
                                                 "rgba":"1 1 1 1"
                                             }))
-    world_body.append(et.Element("light",attrib={"pos":"0 5 5",
+    world_body.append(et.Element("light",attrib={"pos":"0 15 15",
                                                 "dir":"0 -1 -1",
                                                 "diffuse":"1 1 1"
     }))
