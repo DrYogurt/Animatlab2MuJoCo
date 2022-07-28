@@ -2511,7 +2511,7 @@
                     <LowerLimit>
                       <Name>2e7d12f0-bc3d-4ed6-9b04-171342bd361c</Name>
                       <ID>2e7d12f0-bc3d-4ed6-9b04-171342bd361c</ID>
-                      <LimitPos>0</LimitPos>
+                      <LimitPos>-1.39626</LimitPos>
                       <Damping>500</Damping>
                       <Restitution>0</Restitution>
                       <Stiffness>100</Stiffness>
@@ -2519,7 +2519,7 @@
                     <UpperLimit>
                       <Name>8c1a8264-d930-4958-99bf-2fc1c3be5d08</Name>
                       <ID>8c1a8264-d930-4958-99bf-2fc1c3be5d08</ID>
-                      <LimitPos>0</LimitPos>
+                      <LimitPos>1.0472</LimitPos>
                       <Damping>500</Damping>
                       <Restitution>0.01</Restitution>
                       <Stiffness>100</Stiffness>
@@ -2975,7 +2975,7 @@
                         <LowerLimit>
                           <Name>6b72f83f-0441-4036-bb37-1af3ed1338af</Name>
                           <ID>6b72f83f-0441-4036-bb37-1af3ed1338af</ID>
-                          <LimitPos>0</LimitPos>
+                          <LimitPos>-1.39626</LimitPos>
                           <Damping>500</Damping>
                           <Restitution>0</Restitution>
                           <Stiffness>100</Stiffness>
@@ -2983,7 +2983,7 @@
                         <UpperLimit>
                           <Name>b16a15e2-63d8-4a90-b91b-74c9b7d6ed5c</Name>
                           <ID>b16a15e2-63d8-4a90-b91b-74c9b7d6ed5c</ID>
-                          <LimitPos>0</LimitPos>
+                          <LimitPos>0.436332</LimitPos>
                           <Damping>500</Damping>
                           <Restitution>0.01</Restitution>
                           <Stiffness>100</Stiffness>

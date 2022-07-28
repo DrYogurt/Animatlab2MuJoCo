@@ -16,7 +16,7 @@ def process_rb(rb):
     if "ChildBodies" in rb.keys():
         new_rb["ChildBodies"] = [process_rb(child) for child in rb["ChildBodies"]["RigidBody"]]
     if "Width" in rb.keys(): #if width exists, assume the rest do...
-        new_rb["size"] = "{} {} {}".format(float(rb["Length"])*50,float(rb["Height"])*50,float(rb["Width"])*50)
+        new_rb["size"] = "{} {} {}".format(float(rb["Length"])/2,float(rb["Height"])/2,float(rb["Width"])/2)
     if "Joint" in rb.keys():
         if isinstance(rb["Joint"],list):
             new_rb["Joints"] = [process_joint(child) for child in rb["Joint"]]
@@ -64,11 +64,11 @@ def process_joint(joint):
 
 def process_item(key,param,is_jnt=False):
     if key =="Position":
-        return "{} {} {}".format(float(param["@x"])*100,float(param["@y"])*100,float(param["@z"])*100)
+        return "{} {} {}".format(float(param["@x"]), float(param["@y"]),float(param["@z"]))
     elif key =="Rotation":
-        x0 = float(param["@x"])*180 / math.pi
-        y0 = float(param["@y"])*180 / math.pi
-        z0 = float(param["@z"])*180 / math.pi
+        x0 = float(param["@x"])
+        y0 = float(param["@y"])
+        z0 = float(param["@z"])
         
         if is_jnt:
             r = R.from_euler("xyz",[x0,-z0,y0],degrees=True)
@@ -96,26 +96,18 @@ def xmlify_body(dic,attach_ids={},root=0):
     })
     body.append(et.Element("geom",attrib={
         "type": "box",
-        "size": dic["size"]
+        "size": dic["size"],
+        "mass":str(dic["Mass"]/1000),
+        "density":str(dic["Density"]*1000)
+
     }))
-    if "Joint" in dic.keys():
-            joints = []
-            if isinstance(dic["Joint"],list):
-                joints = dic["Joint"]
-            else:
-                joints.append(dic["Joint"])
-            for value in joints:
-                body.append(et.Element("joint",attrib={
-                    "name":value["Name"],
-                    "pos":value["Position"],
-                    "axis":value["Rotation"] # TODO: Potential issue n+2
-                }))
     if "ChildBodies" in dic.keys():
         for value in dic["ChildBodies"]:
             if value["Type"] == "Attachment":
                 body.append(et.Element("site",attrib={
                     "name":value["Name"],
-                    "pos":value["Position"]
+                    "pos":value["Position"],
+                    "size":"0.001 0.001 0.001"
                 }))
                 attach_ids[value["ID"]] = value["Name"]
             if value["Type"].__contains__("Muscle"):
@@ -123,13 +115,48 @@ def xmlify_body(dic,attach_ids={},root=0):
             if value["Type"] == "Box":
                 child, child_muscles, _ = xmlify_body(value,attach_ids=attach_ids,root=1)
                 body.append(child)
-                muscles.append(child_muscles)
+                muscles = muscles + child_muscles
+    if "Joint" in dic.keys():
+            joints = []
+            if isinstance(dic["Joint"],list):
+                joints = dic["Joint"]
+            else:
+                joints.append(dic["Joint"])
+            for value in joints:
+                if value["limited"]:
+                    body.append(et.Element("joint",attrib={
+                            "name":value["Name"],
+                            "pos":value["Position"],
+                            "axis":value["axis"],
+                            "limited":"true",
+                            "range":"{} {}".format(value["LowerLimit"]["LimitPos"],value["UpperLimit"]["LimitPos"]),
+                            "stiffness":str(value["LowerLimit"]["Stiffness"]),
+                            "damping":str(value["LowerLimit"]["Damping"])
+                        }))
+                else:
+                    body.append(et.Element("joint",attrib={
+                        "name":value["Name"],
+                        "pos":value["Position"],
+                        "axis":value["axis"]
+                    }))
+                
 
     if root == 0:
-        pass
+        tendons = et.Element("tendon")
+        for muscle in muscles:
+            t = et.SubElement(tendons,"spatial",attrib={"name":muscle["Name"]})
+            for aid in muscle["Attachments"]["AttachID"]:
+                t.append(et.Element("site",attrib={
+                    "site":attach_ids[aid]
+                    }))
+        muscles = tendons
+
+
+
+
+
         #for muscle in muscles:
     return body, muscles, attach_ids
-
 def main():
     # Import rat xml and convert to dictonary
     with open("xmls/Whole_leg_sim_Standalone.asim",'r') as f:
@@ -139,12 +166,12 @@ def main():
 
     dic = process_rb(rat["RigidBody"])
     global_rot = dic["Rotation"].split(" ")
-    global_rot[0] = str(float(global_rot[0]) + 90)
+    global_rot[0] = str(float(global_rot[0]) + math.pi / 2)
     dic["Rotation"] = " ".join(global_rot)
     
 
     root = et.Element("mujoco")
-    root.append(et.Element("compiler",attrib={"coordinate":"local","angle":"degree","eulerseq":"xyz"}))
+    root.append(et.Element("compiler",attrib={"coordinate":"local","angle":"radian","eulerseq":"xyz"}))
 
     default = et.SubElement(root,"default")
     default.append(et.Element("geom",attrib={"rgba":".8 .4 .6 1"}))
@@ -158,18 +185,19 @@ def main():
                                             }))
     world_body = et.SubElement(root,"worldbody")
     world_body.append(et.Element("geom",attrib={"name":"floor",
-                                                "pos":"0 0 -10",
-                                                "size":"10 10 0.125",
+                                                "pos":"0 0 -0.5",
+                                                "size":"1 1 0.125",
                                                 "type":"plane",
                                                 "condim":"3",
                                                 "rgba":"1 1 1 1"
                                             }))
-    world_body.append(et.Element("light",attrib={"pos":"0 15 15",
+    world_body.append(et.Element("light",attrib={"pos":"0 5 5",
                                                 "dir":"0 -1 -1",
                                                 "diffuse":"1 1 1"
     }))
     body,muscles,attach_ids = xmlify_body(dic)
     world_body.append(body)
+    root.append(muscles)
     with open("xmls/NewRat.xml","wb") as fp: 
         et.indent(root)
         tree = et.ElementTree(root)
