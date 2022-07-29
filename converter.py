@@ -1,6 +1,5 @@
 import xmltodict
 import xml.etree.ElementTree as et
-from scipy.spatial.transform import Rotation as R
 import numpy as np
 import math
 
@@ -8,7 +7,7 @@ def process_rb(rb):
     new_rb = {}
     keys = ["Name","ID","Mass","Density","Position","Rotation","Type",
             "IsCollisonObject","IsContactSensor",
-            "StimulusTension","Length Tension","MaximumTension","Kse","Kpe","B","Attachments"]
+            "StimulusTension","LengthTension","MaximumTension","Kse","Kpe","B","Attachments"]
     for key,value in rb.items():
         if key in keys:
             new_rb[key] = process_item(key,value)
@@ -71,11 +70,9 @@ def process_item(key,param,is_jnt=False):
         z0 = float(param["@z"])
         
         if is_jnt:
-            r = R.from_euler("xyz",[x0,-z0,y0],degrees=True)
-            r_mat = r.as_matrix()
-            [x, y, z] =  np.matmul(r_mat,np.array([1, 0, 0]).transpose())
-            print(x,y,z)
-            return "{} {} {}".format(x,y,z)
+            #[x, y, z] =  np.matmul(r_mat,np.array([1, 0, 0]).transpose())
+            #print(x,y,z)
+            return "{} {} {}".format(x0,y0,z0)
         else:
             return "{} {} {}".format(x0,y0,z0)
     else:
@@ -130,8 +127,8 @@ def xmlify_body(dic,attach_ids={},root=0):
                             "axis":value["axis"],
                             "limited":"true",
                             "range":"{} {}".format(value["LowerLimit"]["LimitPos"],value["UpperLimit"]["LimitPos"]),
-                            "stiffness":str(value["LowerLimit"]["Stiffness"]),
-                            "damping":str(value["LowerLimit"]["Damping"])
+                            #"stiffness":str(value["LowerLimit"]["Stiffness"]),
+                            #"damping":str(value["LowerLimit"]["Damping"])
                         }))
                 else:
                     body.append(et.Element("joint",attrib={
@@ -142,14 +139,20 @@ def xmlify_body(dic,attach_ids={},root=0):
                 
 
     if root == 0:
-        tendons = et.Element("tendon")
+        tendon_t = et.Element("tendon")
+        muscle_t = et.Element("actuator")
         for muscle in muscles:
-            t = et.SubElement(tendons,"spatial",attrib={"name":muscle["Name"]})
+            t = et.SubElement(tendon_t,"spatial",attrib={"name":muscle["Name"]+"tendon", "width":"0.001"})
             for aid in muscle["Attachments"]["AttachID"]:
                 t.append(et.Element("site",attrib={
-                    "site":attach_ids[aid]
-                    }))
-        muscles = tendons
+                    "site":attach_ids[aid],
+                  }))
+            m = et.SubElement(muscle_t,"muscle",attrib={
+                                                    "name":muscle["Name"]+"muscle",
+                                                    "tendon":muscle["Name"]+"tendon"})
+
+
+        muscles = (tendon_t, muscle_t)
 
 
 
@@ -176,6 +179,8 @@ def main():
     default = et.SubElement(root,"default")
     default.append(et.Element("geom",attrib={"rgba":".8 .4 .6 1"}))
 
+    option = et.SubElement(root, "option",attrib={"collision":"predefined"})
+
     asset = et.SubElement(root,"asset")
     asset.append(et.Element("texture",attrib={"type":"skybox",
                                             "builtin":"gradient",
@@ -195,9 +200,10 @@ def main():
                                                 "dir":"0 -1 -1",
                                                 "diffuse":"1 1 1"
     }))
-    body,muscles,attach_ids = xmlify_body(dic)
+    body,(tendons,muscles),attach_ids = xmlify_body(dic)
     world_body.append(body)
     root.append(muscles)
+    root.append(tendons)
     with open("xmls/NewRat.xml","wb") as fp: 
         et.indent(root)
         tree = et.ElementTree(root)

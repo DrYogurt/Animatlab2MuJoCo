@@ -3,6 +3,7 @@
   <default>
     <geom rgba=".8 .4 .6 1" />
   </default>
+  <option collision="predefined" />
   <asset>
     <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256" height="256" />
   </asset>
@@ -29,15 +30,15 @@
             <geom type="box" size="0.0031 0.0068 0.0031" mass="0.001571" density="3005.0" />
             <site name="RH_AnkleZ Extensor Foot" pos="0.002167 0.007587 0.000173" size="0.001 0.001 0.001" />
             <site name="RH_AnkleZ Flexor Foot" pos="0.001939 -0.002013 -0.000994" size="0.001 0.001 0.001" />
-            <joint name="RH_AnkleZ" pos="0.0001 0.0028 0.0002" axis="0 0 1" limited="true" range="-1.39626 0.436332" stiffness="100.0" damping="500.0" />
+            <joint name="RH_AnkleZ" pos="0.0001 0.0028 0.0002" axis="0 0 1" limited="true" range="-1.39626 0.436332" />
           </body>
           <site name="RH_Knee Flexor Tibia" pos="-0.016477 0.001729 -0.004386" size="0.001 0.001 0.001" />
           <site name="RH_AnkleZ Flexor Tibia" pos="-0.011594 -0.002965 -7.7413e-05" size="0.001 0.001 0.001" />
           <site name="RH_Knee Extensor Tibia" pos="-0.015982 0.000219 0.000492" size="0.001 0.001 0.001" />
-          <joint name="RH_Knee" pos="-0.02244 0.0 0.0" axis="0 0 1" limited="true" range="-1.39626 1.0472" stiffness="100.0" damping="500.0" />
+          <joint name="RH_Knee" pos="-0.02244 0.0 0.0" axis="0 0 1" limited="true" range="-1.39626 1.0472" />
         </body>
         <site name="RH_HipZ Extensor Femur" pos="0.000552 0.007969 0.001961" size="0.001 0.001 0.001" />
-        <joint name="RH_HipZ" pos="0.0 0.0179 0.0" axis="0 0 1" limited="true" range="-1.0472 0.872665" stiffness="100.0" damping="500.0" />
+        <joint name="RH_HipZ" pos="0.0 0.0179 0.0" axis="0 0 1" limited="true" range="-1.0472 0.872665" />
       </body>
       <body name="LH_Femur" pos="0.007095 0.015899 0.017901" euler="-1.902 0.0 0.0">
         <geom type="box" size="0.00345 0.0179 0.00345" mass="0.014142" density="8297.0" />
@@ -56,69 +57,83 @@
             <geom type="box" size="0.0031 0.0068 0.0031" mass="0.001571" density="3005.0" />
             <site name="LH_AnkleZ Extensor Foot" pos="0.002148 0.007645 -0.000136" size="0.001 0.001 0.001" />
             <site name="LH_AnkleZ Flexor Foot" pos="0.001936 -0.001947 0.001083" size="0.001 0.001 0.001" />
-            <joint name="LH_AnkleZ" pos="0.0001 0.0029 -0.0001" axis="0 0 1" limited="true" range="-1.39626 0.436332" stiffness="100.0" damping="500.0" />
+            <joint name="LH_AnkleZ" pos="0.0001 0.0029 -0.0001" axis="0 0 1" limited="true" range="-1.39626 0.436332" />
           </body>
-          <joint name="LH_Knee" pos="-0.02244 0.0 0.0" axis="0 0 1" limited="true" range="-1.39626 1.0472" stiffness="100.0" damping="500.0" />
+          <joint name="LH_Knee" pos="-0.02244 0.0 0.0" axis="0 0 1" limited="true" range="-1.39626 1.0472" />
         </body>
         <site name="LH_Knee Extensor Femur mid" pos="0.000443 -0.020263 -0.001186" size="0.001 0.001 0.001" />
         <site name="LH_Knee Extensor Femur Mid2" pos="-0.006086 -0.017544 -0.002457" size="0.001 0.001 0.001" />
-        <joint name="LH_HipZ" pos="-7.78e-09 0.0179 6.54e-07" axis="0 0 1" limited="true" range="-1.0472 0.872665" stiffness="100.0" damping="500.0" />
+        <joint name="LH_HipZ" pos="-7.78e-09 0.0179 6.54e-07" axis="0 0 1" limited="true" range="-1.0472 0.872665" />
       </body>
       <site name="LH_HipZ Flexor Pelvis" pos="-0.011108 0.009991 0.003434" size="0.001 0.001 0.001" />
     </body>
   </worldbody>
+  <actuator>
+    <muscle name="LH_HipZ-Extmuscle" tendon="LH_HipZ-Exttendon" />
+    <muscle name="RH_Knee-Flxmuscle" tendon="RH_Knee-Flxtendon" />
+    <muscle name="RH_AnkleZ-Flxmuscle" tendon="RH_AnkleZ-Flxtendon" />
+    <muscle name="RH_AnkleZ-Extmuscle" tendon="RH_AnkleZ-Exttendon" />
+    <muscle name="RH_Knee-Extmuscle" tendon="RH_Knee-Exttendon" />
+    <muscle name="RH_HipZ-Extmuscle" tendon="RH_HipZ-Exttendon" />
+    <muscle name="LH_Knee-Extmuscle" tendon="LH_Knee-Exttendon" />
+    <muscle name="LH_AnkleZ-Extmuscle" tendon="LH_AnkleZ-Exttendon" />
+    <muscle name="LH_AnkleZ-Flxmuscle" tendon="LH_AnkleZ-Flxtendon" />
+    <muscle name="LH_Knee-Flxmuscle" tendon="LH_Knee-Flxtendon" />
+    <muscle name="LH_HipZ-Flxmuscle" tendon="LH_HipZ-Flxtendon" />
+    <muscle name="RH_HipZ-Flxmuscle" tendon="RH_HipZ-Flxtendon" />
+  </actuator>
   <tendon>
-    <spatial name="LH_HipZ-Ext">
+    <spatial name="LH_HipZ-Exttendon" width="0.001">
       <site site="LH_HipZ Extensor Pelvis" />
       <site site="LH_HipZ Extensor Femur" />
     </spatial>
-    <spatial name="RH_Knee-Flx">
+    <spatial name="RH_Knee-Flxtendon" width="0.001">
       <site site="RH_Knee Flexor Femur" />
       <site site="RH_Knee Flexor Tibia" />
     </spatial>
-    <spatial name="RH_AnkleZ-Flx">
+    <spatial name="RH_AnkleZ-Flxtendon" width="0.001">
       <site site="RH_AnkleZ Flexor Tibia" />
       <site site="RH_AnkleZ Flexor Foot" />
     </spatial>
-    <spatial name="RH_AnkleZ-Ext">
+    <spatial name="RH_AnkleZ-Exttendon" width="0.001">
       <site site="RH_AnkleZ Extensor Tibia" />
       <site site="RH_AnkleZ Extensor Tibia Mid" />
       <site site="RH_AnkleZ Extensor Foot" />
     </spatial>
-    <spatial name="RH_Knee-Ext">
+    <spatial name="RH_Knee-Exttendon" width="0.001">
       <site site="RH_Knee Extensor Femur" />
       <site site="RH_Knee Extensor Femur Mid2" />
       <site site="RH_Knee Extensor Femur Mid" />
       <site site="RH_Knee Extensor Tibia" />
     </spatial>
-    <spatial name="RH_HipZ-Ext">
+    <spatial name="RH_HipZ-Exttendon" width="0.001">
       <site site="RH_HipZ Extensor Pelvis" />
       <site site="RH_HipZ Extensor Femur" />
     </spatial>
-    <spatial name="LH_Knee-Ext">
+    <spatial name="LH_Knee-Exttendon" width="0.001">
       <site site="LH_Knee Extensor Femur" />
       <site site="LH_Knee Extensor Femur Mid2" />
       <site site="LH_Knee Extensor Femur mid" />
       <site site="LH_Knee Extensor Tibia" />
     </spatial>
-    <spatial name="LH_AnkleZ-Ext">
+    <spatial name="LH_AnkleZ-Exttendon" width="0.001">
       <site site="LH_AnkleZ Extensor Tibia" />
       <site site="LH_AnkleZ Extensor Tibia Mid" />
       <site site="LH_AnkleZ Extensor Foot" />
     </spatial>
-    <spatial name="LH_AnkleZ-Flx">
+    <spatial name="LH_AnkleZ-Flxtendon" width="0.001">
       <site site="LH_AnkleZ Flexor Tibia" />
       <site site="LH_AnkleZ Flexor Foot" />
     </spatial>
-    <spatial name="LH_Knee-Flx">
+    <spatial name="LH_Knee-Flxtendon" width="0.001">
       <site site="LH_Knee Flexor Femur" />
       <site site="LH_Knee Flexor Tibia" />
     </spatial>
-    <spatial name="LH_HipZ-Flx">
+    <spatial name="LH_HipZ-Flxtendon" width="0.001">
       <site site="LH_HipZ Flexor Pelvis" />
       <site site="LH_HipZ Flexor Femur" />
     </spatial>
-    <spatial name="RH_HipZ-Flx">
+    <spatial name="RH_HipZ-Flxtendon" width="0.001">
       <site site="RH_HipZ Flexor Pelvis" />
       <site site="RH_HipZ Flexor Femur" />
     </spatial>
