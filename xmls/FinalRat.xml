@@ -69,20 +69,20 @@
     </body>
   </worldbody>
   <actuator>
-    <muscle name="LH_HipZ-Extmuscle" tendon="LH_HipZ-Exttendon" scale="800" />
-    <muscle name="RH_Knee-Flxmuscle" tendon="RH_Knee-Flxtendon" scale="800" />
-    <muscle name="RH_AnkleZ-Flxmuscle" tendon="RH_AnkleZ-Flxtendon" scale="800" />
-    <muscle name="RH_AnkleZ-Extmuscle" tendon="RH_AnkleZ-Exttendon" scale="800" />
-    <muscle name="RH_Knee-Extmuscle" tendon="RH_Knee-Exttendon" scale="800" />
-    <muscle name="RH_HipZ-Extmuscle" tendon="RH_HipZ-Exttendon" scale="800" />
-    <muscle name="LH_Knee-Extmuscle" tendon="LH_Knee-Exttendon" scale="800" />
-    <muscle name="LH_AnkleZ-Extmuscle" tendon="LH_AnkleZ-Exttendon" scale="800" />
-    <muscle name="LH_AnkleZ-Flxmuscle" tendon="LH_AnkleZ-Flxtendon" scale="800" />
-    <muscle name="LH_Knee-Flxmuscle" tendon="LH_Knee-Flxtendon" scale="800" />
-    <muscle name="LH_HipZ-Flxmuscle" tendon="LH_HipZ-Flxtendon" scale="800" />
-    <muscle name="RH_HipZ-Flxmuscle" tendon="RH_HipZ-Flxtendon" scale="800" />
+    <muscle name="LH_HipZ-Extmuscle" tendon="LH_HipZ-Exttendon" force="1.0" range="0.0 0.1" timeconst="0.01 0.04" lmin="-0.3724" lmax="2.3724" vmax="10.0" fpmax="1.0" fvmax="1.0"/>
+    <muscle name="RH_Knee-Flxmuscle" tendon="RH_Knee-Flxtendon"  />
+    <muscle name="RH_AnkleZ-Flxmuscle" tendon="RH_AnkleZ-Flxtendon" />
+    <muscle name="RH_AnkleZ-Extmuscle" tendon="RH_AnkleZ-Exttendon" />
+    <muscle name="RH_Knee-Extmuscle" tendon="RH_Knee-Exttendon" />
+    <muscle name="RH_HipZ-Extmuscle" tendon="RH_HipZ-Exttendon" force="1.0" range="0.0 0.1" timeconst="0.01 0.04" lmin="-0.3724" lmax="2.3724" vmax="10.0" fpmax="1.0" fvmax="1.0"/>
+    <muscle name="LH_Knee-Extmuscle" tendon="LH_Knee-Exttendon" />
+    <muscle name="LH_AnkleZ-Extmuscle" tendon="LH_AnkleZ-Exttendon" />
+    <muscle name="LH_AnkleZ-Flxmuscle" tendon="LH_AnkleZ-Flxtendon" />
+    <muscle name="LH_Knee-Flxmuscle" tendon="LH_Knee-Flxtendon" />
+    <muscle name="LH_HipZ-Flxmuscle" tendon="LH_HipZ-Flxtendon" force="16.7" range="0.0 0.1" timeconst="0.01 0.04" lmin="-0.5039" lmax="2.5039" vmax="10.0" fpmax="1.0" fvmax="1.0" />
+    <muscle name="RH_HipZ-Flxmuscle" tendon="RH_HipZ-Flxtendon" force="16.7" range="0.0 0.1" timeconst="0.01 0.04" lmin="-0.5039" lmax="2.5039" vmax="10.0" fpmax="1.0" fvmax="1.0"/>
   </actuator>
-  <tendon>
+ <tendon>
     <spatial name="LH_HipZ-Exttendon" width="0.001">
       <site site="LH_HipZ Extensor Pelvis" />
       <site site="LH_HipZ Extensor Femur" />
